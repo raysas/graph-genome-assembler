@@ -43,3 +43,35 @@ $V, E \leftarrow G$
 
 ## References  
 * [Eilliam Fiset youtube playlist](https://www.youtube.com/watch?v=8MpoO2zA2l4) for graph theory - particulalry Eulerian path and Hierholzer's algorithm  
+
+## Demo
+
+Python libraries enlisted in [`requirements.txt`](./requirements.txt) file.  
+<!-- To use `graphviz` to visualize the graph, you need to install this if you're on conda:
+```bash
+conda install -c anaconda python-graphviz
+```
+Or else install it on ubuntu:
+```bash
+sudo apt-get install graphviz
+``` -->
+
+To build a hamiltonian assembly graph, you can use the following code:
+```bash
+python src/HAG.py
+```
+Which will try building a graph from 3-mers teh form teh dna string `ATGCGATGACCTGACT`, following this example:
+```python
+>>> dna_string = "ATGCGATGACCTGACT"
+>>> k = 3
+>>> a=split_into_kmers(dna_string, k)
+>>> g=HAGraph(a)
+>>> print(g)
+kmers       14
+overlaps    29
+dtype: int64
+Hamiltionian Assembly Graph
+```
+<p align='center'>
+<img src='./assets/HAG.png' width=60%>
+</p>
