@@ -8,7 +8,7 @@ from utils import *
 class HAGraph(nx.DiGraph):
     '''
     Hamiltionian Assembly Graph class
-        inherits from networkx.MultiDiGraph (directed graph that allows multiple edges between nodes)
+        inherits from networkx.DiGraph (directed graph)
         takes a list of kmers while instantiating and transforms each into a Kmer object
     '''
 
@@ -67,16 +67,17 @@ class HAGraph(nx.DiGraph):
 
         return 'Hamiltionian Assembly Graph'
 
+
     def viz(self,title='None'):
         if title=='None':
             title='Hamiltionian Assembly Graph'
         pos=nx.spring_layout(self, seed=42)
         fig, ax = plt.subplots()
         # color title
-        ax.set_title(title, fontsize=10, color='lightblue')
+        ax.set_title(title, fontsize=10, color='#660033')
         fig.patch.set_alpha(0)  
         ax.set_facecolor("none")  
-        nx.draw(self, pos, with_labels=True, edge_color='lightblue', node_color='lightgrey', 
+        nx.draw(self, pos, with_labels=True, edge_color='#660033', node_color='lightgrey', 
                 font_size=10, node_size=1000, ax=ax)
         plt.show()
 
