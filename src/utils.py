@@ -1,5 +1,8 @@
-'''Utility functions for graph construction'''
+'''Utility functions for graph construction and model eval'''
 
+from Bio import pairwise2
+import pandas as pd
+from IPython.display import display
 
 def suffix(kmer):
     return kmer[1:]
@@ -60,3 +63,29 @@ def kmerize(kmers):
 def split_into_kmers(dna_string, k):
     kmers = [dna_string[i:i+k] for i in range(len(dna_string) - k + 1)]
     return kmers
+
+def evaluate_modeled_sequence(real_seq, graph_modeled_seq):
+    '''
+    evaluates how good the modeled seq is compared to the real seq (testing), using needleman-wunsch for alignment
+    display a df of parameters used in accuracy computation
+    param: 
+        real_seq: str, true sequence
+        graph_modeled_seq: str, predicted sequence
+    return:
+        accuracy: float, accuracy of the prediction which is defined based on length of the real sequence, gaps and mismatches
+    '''
+    len_real_seq = len(real_seq)
+    len_graph_seq = len(graph_modeled_seq)
+
+    aln = pairwise2.align.globalxx(real_seq, graph_modeled_seq, one_alignment_only=True)[0]
+    aligned_real_seq, aligned_graph_seq, score, begin, end = aln
+
+    gaps = aligned_real_seq.count('-') + aligned_graph_seq.count('-')
+    mismatches = sum(1 for i in range(len(aligned_real_seq)) if aligned_real_seq[i] != aligned_graph_seq[i])
+    accuracy = (len_real_seq - gaps - mismatches) / len_real_seq
+
+    df=pd.DataFrame({'real_seq':[len_real_seq],'graph_seq':[len_graph_seq],'gaps':[gaps],'mismatches':[mismatches],'accuracy':[accuracy]})
+    display(df)
+
+
+    return accuracy

@@ -67,7 +67,7 @@ class DBGraph(nx.MultiDiGraph):
         fig.patch.set_alpha(0)  
         ax.set_facecolor("none")  
         labels = nx.get_edge_attributes(self, 'label')
-        nx.draw(self, pos, with_labels=False, node_size=800, node_color="#91CBD7", connectionstyle='arc3, rad = 0.1')
+        nx.draw(self, pos, with_labels=False, node_size=800, node_color="#91CBD7", connectionstyle='arc3, rad = 0.1', edge_color='lightgrey')
         nx.draw_networkx_edge_labels(self, pos, edge_labels=labels, font_color='#4E9BB9', font_size=10, bbox=dict(facecolor='none', edgecolor='none'))
         plt.show()
 
