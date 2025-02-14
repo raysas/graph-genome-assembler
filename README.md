@@ -28,6 +28,23 @@ Finding the Eulerian path is a well-known problem, and it can be solved in polyn
 _In this repository we will explore the construction for both types of graphs. Although the main focus will be on the De Bruijn graph and the Eulerian path, it would be interesting to try metahuristic algorithms to solve the Hamiltonian path problem in an approximate way._
 
 
+**Terminology**:
+
+| Term | Definition |
+|------|------------|
+| Graph | set of vertices with edges connecting them |
+| Hamiltonian path | path that goes through all vertices of a graph once and only once |
+| Eulerian path | path that goes through all edges of a graph once and only once |
+| De Bruijn graph | a directed graph representing overlaps between sequences of symbols | 
+| K-mer | substring of length k |
+| Read | any sequence that comes out of a sequencer | 
+| Contig | gap-less asembled sequence (contiguous) |
+| Scaffolding | process of filling gaps between contigs | 
+| Genome | full DNA sequence of an organism |
+| Assembly | process of reconstructing the genome from reads |
+
+_First step of assembly is to break down reads to k-mers_
+
 > [!CAUTION]
 Even though an exact solution of the Eulerian path exists and is solvable in polynomial time, it's still an open problem in genome assembly.  
 The main issue lies with the nature of sequenced reads (errors, repeats, gaps...). Ideally, we would get the correct sequence of all the fragments we have initially created from the whole genome, so we would get one perfectly reconstructed sequence. However that's never the case, we always end up with several assembled "contigs", which is later complemented with scaffolding approaches to fill in gaps and elucidate the whole genome sequence. 
@@ -100,9 +117,9 @@ Hamiltionian Assembly Graph
 <img src='./assets/HAG.png' width=60%>
 </p>
 
-## Demo
 
-Python libraries enlisted in [`requirements.txt`](./requirements.txt) file.  
+
+
 <!-- To use `graphviz` to visualize the graph, you need to install this if you're on conda:
 ```bash
 conda install -c anaconda python-graphviz
@@ -116,5 +133,7 @@ sudo apt-get install graphviz
 
 ## References  
 * [Eilliam Fiset youtube playlist](https://www.youtube.com/watch?v=8MpoO2zA2l4) for graph theory - particulalry Eulerian path and Hierholzer's algorithm  
+
+Python libraries enlisted in [`requirements.txt`](./requirements.txt) file.  
 
 [MIT License](./LICENSE)
