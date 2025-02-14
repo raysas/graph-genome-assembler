@@ -21,10 +21,10 @@ class DBGraph(nx.MultiDiGraph):
 
     def __establish_nodes_links(self):
         for kmer in self.kmers:
-            prefix, suffix = prefix(kmer), suffix(kmer)
-            self.add_node(prefix)
-            self.add_node(suffix)
-            self.add_edge(prefix, suffix, label=kmer)
+            pref, suff = prefix(kmer), suffix(kmer)
+            self.add_node(pref)
+            self.add_node(suff)
+            self.add_edge(pref, suff, label=kmer)
 
     def __init__(self, kmers):
         super().__init__()
@@ -56,13 +56,32 @@ class DBGraph(nx.MultiDiGraph):
         else:
             return super().__setattr__(name, value)
         
-    def viz(self):
+    def viz(self, title='De Bruijn Graph'):
         '''
         -- visualize the graph --
         '''
-        plt.figure(figsize=(10,10))
+        pos=nx.spring_layout(self, seed=42)
+        fig, ax = plt.subplots()
         pos = nx.spring_layout(self)
+        ax.set_title(title, fontsize=10, color='#4E9BB9')
+        fig.patch.set_alpha(0)  
+        ax.set_facecolor("none")  
         labels = nx.get_edge_attributes(self, 'label')
         nx.draw(self, pos, with_labels=False, node_size=800, node_color="#91CBD7", connectionstyle='arc3, rad = 0.1')
-        nx.draw_networkx_edge_labels(self, pos, edge_labels=labels, font_color='#4E9BB9', font_size=10)
+        nx.draw_networkx_edge_labels(self, pos, edge_labels=labels, font_color='#4E9BB9', font_size=10, bbox=dict(facecolor='none', edgecolor='none'))
+        plt.show()
+
         
+    def __str__(self):
+        stats = {'kmers': self.number_of_nodes(), 'overlaps': self.number_of_edges()}
+        stats = pd.Series(stats)
+        display(stats)
+        self.viz()
+        return 'De Bruijn Graph'
+    
+if __name__ == '__main__':
+    dna_string = "ATGCGATGACCTGACT"
+    k = 3
+    a=split_into_kmers(dna_string, k)
+    g=DBGraph(a)
+    print(g)

@@ -1,4 +1,4 @@
-# Genome assembly through Graph theory <img src='./assets/neural.png' width=25>
+# Genome assembly through Graph theory <img src='./assets/neural.png' width=35>
 
 Genome Assembly is one of the biggest bioinformatics problems aiming to generate process and generate genomic data from sequenced DNA. It is still tackled by researchers, _Assemblethon_ is a widely known competition to compare different genome assembly algorithms and their performance.
 
@@ -22,12 +22,15 @@ But this approach allowed another visualization of the problem, leading a simple
 </p>
 
 The Eulerian cycle is a path that goes through all edges of a graph once and only once, and ends up in the same node, however unlike the Hamiltonian path, it can pass through vertices several times. Solving it is doable in polynomial time, and it's the key used in many genome assembly algorithms to solve the problem.
-The graph that represents the reads is called the _De Bruijn graph_, and the Eulerian path in this graph will give us the original genome.
+The graph that represents the reads is called the _De Bruijn graph_, and the Eulerian path in this graph will give us the original genome.  
+Finding the Eulerian path is a well-known problem, and it can be solved in polynomial time using _Hierholzer's algorithm_, an exact solution.
 
-In this repository we will explore the construction for both types of graphs. Although the main focus will be on the De Bruijn graph and the Eulerian path, it would be interesting to try metahuristic algorithms to solve the Hamiltonian path problem in an approximate way.
+_In this repository we will explore the construction for both types of graphs. Although the main focus will be on the De Bruijn graph and the Eulerian path, it would be interesting to try metahuristic algorithms to solve the Hamiltonian path problem in an approximate way._
 
 
-
+> [!CAUTION]
+Even though an exact solution of the Eulerian path exists and is solvable in polynomial time, it's still an open problem in genome assembly.  
+The main issue lies with the nature of sequenced reads (errors, repeats, gaps...). Ideally, we would get the correct sequence of all the fragments we have initially created from the whole genome, so we would get one perfectly reconstructed sequence. However that's never the case, we always end up with several assembled "contigs", which is later complemented with scaffolding approaches to fill in gaps and elucidate the whole genome sequence. 
 
 ## De Bruijn Graph
 De Bruijn Graph is a directed graph that represents overlaps between k-mers (k-mers as edges). Used to reconstruct genome from Eulerian path. It provides an exact solution through _Hierholzer's algorithm_.
@@ -40,10 +43,32 @@ De Bruijn Graph is a directed graph that represents overlaps between k-mers (k-m
 <!-- $Hierholzer's\ algorithm(G):$  
 $V, E \leftarrow G$ -->
 
-> [!IMPORTANT]
-If an exact solution of the Eulerian path exists and is solvable in polynomial time, why is it still an open problem in genome assembly? 
-The main issue lies with the sequenced reads. Ideally, we would get the correct sequence of all the fragments we have initially created from the whole genome, so we would get one perfectly reconstructed sequence. However that's never the case, we always end up with several assembled "contigs", which is later complemented with other scaffolding approaches to fill in gaps and get the genome.  
-Let alone the fact that we have a percentage error for each bp sequenced, many reads might not show overlap, failing to reconstruct the fragments as they were. Finding overlaps is especially problematic while dealing with repeats, like `AGAGAGAGAAGA` where the overlap is not unique. To make the assembly results more accurate, we consider starting off with a large k value, however this raises the complexity of the problem and makes it harder to find overlaps. It's always gonna be a trade-off
+ 
+
+_Finding overlaps is especially problematic while dealing with repeats, like `AGAGAGAGAAGA` where the overlap is not unique. To make the assembly results more accurate, we consider starting off with a large k value, however this raises the complexity of the problem and makes it harder to find overlaps. It's always gonna be a trade-off_
+
+To build a De Bruijn graph, you can use the following code:
+```bash
+python src/DBG.py
+```
+Which will try building a graph from 3-mers the form the dna string `ATGCGATGACCTGACT`, following this example:
+```python
+>>> dna_string = "ATGCGATGACCTGACT"
+>>> k = 3
+>>> a=split_into_kmers(dna_string, k)
+>>> g=DBGraph(a)
+>>> print(g)
+kmers        8
+overlaps    14
+dtype: int64
+De Bruijn Graph
+``` 
+
+<p align='center'>
+<img src='./assets/DBG.png' width=60%>
+</p>
+
+
 
 ## Hamiltonian Assembly Graph
 
@@ -54,19 +79,6 @@ This graph that has k-mers as nodes and overlap as edges, solved by the Hamilton
 * Graph: directed
 
 It will be a digraph (inherits `nx.DiGraph`), as overlaps can be in both directions. Most importantly, we will allow for duplicate **nodes**, and that's through the implementation of a `Kmer` class that will allow to have unqiue instances of 2 identically sequenced k-mers (not to lose the multiplicity, it's a very important design step). We do not care for edge multiplicity, as we only need to know if there is an overlap or not (binary relationship). From here we can see some differences in class implementation with DBG, in addition to the formal definition of nodes and edges.
-
-
-## Demo
-
-Python libraries enlisted in [`requirements.txt`](./requirements.txt) file.  
-<!-- To use `graphviz` to visualize the graph, you need to install this if you're on conda:
-```bash
-conda install -c anaconda python-graphviz
-```
-Or else install it on ubuntu:
-```bash
-sudo apt-get install graphviz
-``` -->
 
 To build a hamiltonian assembly graph, you can use the following code:
 ```bash
@@ -87,6 +99,20 @@ Hamiltionian Assembly Graph
 <p align='center'>
 <img src='./assets/HAG.png' width=60%>
 </p>
+
+## Demo
+
+Python libraries enlisted in [`requirements.txt`](./requirements.txt) file.  
+<!-- To use `graphviz` to visualize the graph, you need to install this if you're on conda:
+```bash
+conda install -c anaconda python-graphviz
+```
+Or else install it on ubuntu:
+```bash
+sudo apt-get install graphviz
+``` -->
+
+
 
 ## References  
 * [Eilliam Fiset youtube playlist](https://www.youtube.com/watch?v=8MpoO2zA2l4) for graph theory - particulalry Eulerian path and Hierholzer's algorithm  

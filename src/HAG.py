@@ -85,7 +85,8 @@ class HAGraph(nx.DiGraph):
         fig.patch.set_alpha(0)  
         ax.set_facecolor("none")  
         nx.draw(self, pos, with_labels=True, edge_color='#ED6571', node_color='lightgrey', 
-                font_size=10, node_size=1000, ax=ax)
+                font_size=10, node_size=1000, ax=ax, connectionstyle='arc3, rad = 0.1')
+    
         plt.show()
 
         
