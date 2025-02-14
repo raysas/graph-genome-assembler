@@ -11,7 +11,21 @@ def validate_kmer(kmer,k):
     return validate_dna(kmer) and len(kmer) == k
 
 class Kmer:
-    '''class Kmer defined as data type for nodes (to allow for duplicate nodes in the multi-digraph)'''
+    '''
+    -- Kmer class --
+    ----------------
+    
+    simple helper class Kmer defined as data type for nodes (to allow for duplicate nodes in the graph)
+    
+    implements the following dunder methods to allow for pythonic semantics like len(kmer), kmer[1:], etc.
+
+    * __init__: constructor
+    * __repr__: string representation show from NodeView
+    * __str__: string representation show from print 
+    * __len__: length of the kmer
+    * __getitem__: indexing and slicing
+
+    '''
     def __init__(self, kmer):
         self.kmer = kmer
 
@@ -31,7 +45,7 @@ class Kmer:
 # k1[1:]
 # prefix(k1)
 # validate_kmer(k1,3)
-# -- successful
+# # -- successful
 
 
 def kmerize(kmers):

@@ -7,9 +7,19 @@ from utils import *
 
 class HAGraph(nx.DiGraph):
     '''
-    Hamiltionian Assembly Graph class
+    -- Hamiltionian Assembly Graph class --
+    ---------------------------------------
         inherits from networkx.DiGraph (directed graph)
         takes a list of kmers while instantiating and transforms each into a Kmer object
+
+    This directed graph is instanciated by taking a valid list of k-mers (dna sequences of the same length)  
+    and has:  
+
+    * nodes: all the kmers  
+    * edges: all the overlaps between kmers (suffix of kmer_1 == prefix of kmer_2)  
+    * k: length of the kmers
+
+    Since multiple k-mers of the same sequence can exist, the graph allows for duplicate nodes through the helper class Kmer (instances with the same seq are not equal, utils.py)
     '''
 
     def __establish_nodes_links(self):
@@ -56,8 +66,6 @@ class HAGraph(nx.DiGraph):
         else:
             return super().__setattr__(name, value)
 
-
-
     def __str__(self):
         stats={'kmers':self.number_of_nodes(),'overlaps':self.number_of_edges()}
         stats=pd.Series(stats)
@@ -73,11 +81,10 @@ class HAGraph(nx.DiGraph):
             title='Hamiltionian Assembly Graph'
         pos=nx.spring_layout(self, seed=42)
         fig, ax = plt.subplots()
-        # color title
-        ax.set_title(title, fontsize=10, color='#660033')
+        ax.set_title(title, fontsize=10, color='#ED657')
         fig.patch.set_alpha(0)  
         ax.set_facecolor("none")  
-        nx.draw(self, pos, with_labels=True, edge_color='#660033', node_color='lightgrey', 
+        nx.draw(self, pos, with_labels=True, edge_color='#ED6571', node_color='lightgrey', 
                 font_size=10, node_size=1000, ax=ax)
         plt.show()
 
